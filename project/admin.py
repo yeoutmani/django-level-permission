@@ -1,5 +1,8 @@
 from django.contrib import admin
-
 from .models import Project
+from guardian.admin import GuardedModelAdmin
 
-admin.site.register(Project)
+class ProjectAdmin(GuardedModelAdmin):
+    pass
+
+admin.site.register(Project, ProjectAdmin)

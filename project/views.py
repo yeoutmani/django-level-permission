@@ -6,6 +6,7 @@ from .models import Project
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
+from guardian.shortcuts import get_objects_for_user
 
 def index(request):
     return render(request, "index.html")
@@ -13,13 +14,12 @@ def index(request):
 def custom_logout(request):
     if request.user.is_authenticated:
         logout(request)
-    
     return redirect('/')
 
 @login_required
 @permission_required("project.view_project")
 def project_listing(request):
-    project_data = Project.objects.all()
+    project_data = get_objects_for_user(request.user, 'project.dg_view_project', klass=Project)
     return render(request, "project.html", {"projects": project_data})
 
 @login_required
